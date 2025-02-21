@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Error } from "mongoose";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -10,7 +10,7 @@ export const signUp = async (req, res, next) => {
     session.startTransaction();
 
     try {
-        //Implement signup logic here
+        //deconstruct the request body to get the name, email and password
         const { name, email, password } = req.body;
 
         //check if user already exists
@@ -54,6 +54,7 @@ export const signUp = async (req, res, next) => {
 export const signIn = async (req, res, next) => {
     try {
 
+        //deconstruct the request body to get the email and password
         const { email, password } = req.body;
 
         const user = await User.findOne({ email });

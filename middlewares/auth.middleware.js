@@ -17,9 +17,11 @@ const authorize = async (req, res, next) => {
         if(!token) return res.status(401).json({success: false, message: 'Not authorized to access this route'});
 
         const decoded = jwt.verify(token, JWT_SECRET);
+        console.log(decoded.id);
 
         const user = await User.findById(decoded.id);
 
+        //if(!user) return res.status(401).json({success: false, message: 'Unauthorized to access this route'});
         if(!user) return res.status(401).json({success: false, message: 'Unauthorized to access this route'});
 
         req.user = user;
