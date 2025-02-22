@@ -17,13 +17,20 @@ export const createSubscription = async (req, res, next) => {
 export const getUserSubscriptions = async (req, res, next) => {
     try {
         
-        if(req.user._id !== req.params.id) {
+        console.log(`user id: ${req.user.id}`);
+        console.log(`params id: ${req.params.userId}`);
+        if (!req.params.userId) {
+            const error = new Error('Missing route parameter: userId');
+            error.status = 400;
+            throw error;
+        }
+        if (req.user.id !== req.params.userId) {
             const error = new Error('You are not the owner of this account');
             error.status = 401;
             throw error;
         }
 
-        const subscriptions = await Subscription.find({ user: req.params.id });
+        const subscriptions = await Subscription.find({ user: req.params.userId });
 
         res.status(200).json({ success: true, data: subscriptions });
     } catch (error) {
